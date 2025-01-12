@@ -8,7 +8,9 @@ pub fn server_main(
 
     let _ = data_channel_sender.send("server:started".to_string());
 
-    for received in cmd_channel_receiver {
+    for received_raw in cmd_channel_receiver {
+        let received = received_raw.as_str();
+
         if received.starts_with("cmd:add") {
             let args: Vec<&str> = received.split_whitespace().collect();
             if args.len() >= 3 {
@@ -22,18 +24,24 @@ pub fn server_main(
                     "Invalid cmd:add format. Use: cmd:add <key> <value>".to_string(),
                 );
             }
-        } else if received == "cmd:print" {
-            print!("Values: ");
-            for (k, v) in &values {
-                println!("{k}: {v}");
-            }
-            print!("");
-        } else if received == "cmd:ping" {
-            let _ = data_channel_sender.send("server:pong".to_string());
-        } else if received == "cmd:exit" {
-            break;
         } else {
-            let _ = data_channel_sender.send(format!("Unknown command: {}", received));
+            match received {
+                "cmd:print" => {
+                    print!("Values: ");
+                    for (k, v) in &values {
+                        println!("{k}: {v}");
+                    }
+                    print!("");
+                },
+                "cmd:ping" => {
+                    let _ = data_channel_sender.send("server:pong".to_string());
+                },
+                "cmd:exit" => break,
+                _ => {
+                    let _ = data_channel_sender.send(format!("Unknown command: {}", received));
+                },
+                
+            }
         }
     }
 
