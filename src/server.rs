@@ -28,6 +28,48 @@ pub fn server_main(
                 values.insert(key, value);
                 let _ = data_channel_sender.send("Value added!".to_string());
             },
+            "del" => {
+                if args.len() != 2 {
+                    let _ = data_channel_sender.send(
+                        "Invalid del syntax. Use: del <key>".to_string(),
+                    );
+                    continue;
+                }
+
+                let key = args[1].to_string();
+                if !values.contains_key(&key) {
+                    let _ = data_channel_sender.send(
+                        "Invalid key".to_string(),
+                    );
+                    continue;
+                }
+
+                values.remove(&key);
+                let _ = data_channel_sender.send(
+                    "Key deleted".to_string(),
+                );
+            },
+            "get" => {
+                if args.len() != 2 {
+                    let _ = data_channel_sender.send(
+                        "Invalid del syntax. Use: del <key>".to_string(),
+                    );
+                    continue;
+                }
+
+                let key = args[1].to_string();
+                if !values.contains_key(&key) {
+                    let _ = data_channel_sender.send(
+                        "Invalid key".to_string(),
+                    );
+                    continue;
+                }
+
+                let value = values.get(&key).unwrap();
+                let _ = data_channel_sender.send(
+                    value.to_string()
+                );
+            },
             "printAll" => {
                 println!("Values: ");
                 for (k, v) in &values {
