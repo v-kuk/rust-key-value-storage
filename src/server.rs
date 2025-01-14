@@ -14,7 +14,7 @@ pub fn server_main(
         let command = args[0];
 
         match command {
-            "cmd:add" => {
+            "set" => {
                 if args.len() >= 3 {
                     let key = args[1].to_string();
                     let value = args[2].to_string();
@@ -23,21 +23,21 @@ pub fn server_main(
                     let _ = data_channel_sender.send("Value added!".to_string());
                 } else {
                     let _ = data_channel_sender.send(
-                        "Invalid cmd:add format. Use: cmd:add <key> <value>".to_string(),
+                        "Invalid set syntax. Use: set <key> <value>".to_string(),
                     );
                 }
             },
-            "cmd:print" => {
-                print!("Values: ");
+            "printAll" => {
+                println!("Values: ");
                 for (k, v) in &values {
                     println!("{k}: {v}");
                 }
-                print!("");
+                println!("");
             },
-            "cmd:ping" => {
+            "ping" => {
                 let _ = data_channel_sender.send("server:pong".to_string());
             },
-            "cmd:exit" => break,
+            "exit" => break,
             _ => {
                 let _ = data_channel_sender.send(format!("Unknown command: {}", received));
             },

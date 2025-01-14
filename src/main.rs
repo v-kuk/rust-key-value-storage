@@ -30,7 +30,7 @@ fn main() {
             continue;
         }
 
-        let cmd = utils::input::get_line("Command: ");
+        let cmd = utils::input::get_line("");
         if cmd.is_empty() {
             continue; // Skip if no input is provided
         }
@@ -39,7 +39,7 @@ fn main() {
         let _ = cmd_channel_sender.send(cmd.clone());
 
         // Exit condition
-        if cmd == "cmd:exit" {
+        if cmd == "exit" {
             break;
         }
 
