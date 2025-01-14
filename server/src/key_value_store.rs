@@ -11,9 +11,9 @@ impl KeyValueStore {
         }
     }
 
-    pub fn set(self: &Self, key: String, value: String) {
+    pub fn set(self: &Self, key: String, value: String) -> Option<String> {
         let mut store = self.store.lock().unwrap();
-        store.insert(key, value);
+        store.insert(key, value)
     }
 
     pub fn get(&self, key: &str) -> Option<String> {
@@ -21,8 +21,8 @@ impl KeyValueStore {
         store.get(key).cloned()
     }
 
-    pub fn del(&self, key: &str) {
+    pub fn del(&self, key: &str) -> Option<String> {
         let mut store = self.store.lock().unwrap();
-        store.remove(key).unwrap();
+        store.remove(key)
     }
 }
