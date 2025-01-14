@@ -15,17 +15,18 @@ pub fn server_main(
 
         match command {
             "set" => {
-                if args.len() >= 3 {
-                    let key = args[1].to_string();
-                    let value = args[2].to_string();
-    
-                    values.insert(key, value);
-                    let _ = data_channel_sender.send("Value added!".to_string());
-                } else {
+                if args.len() != 3 {
                     let _ = data_channel_sender.send(
                         "Invalid set syntax. Use: set <key> <value>".to_string(),
                     );
+                    continue;
                 }
+
+                let key = args[1].to_string();
+                let value = args[2].to_string();
+
+                values.insert(key, value);
+                let _ = data_channel_sender.send("Value added!".to_string());
             },
             "printAll" => {
                 println!("Values: ");
